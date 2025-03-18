@@ -23,6 +23,7 @@ public class JavaMapAndSetExercises {
         System.out.println( "--");
 	}
     public static void main(String[] args) {
+        /*
         Set<String> names = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
         List<String> nameList = new ArrayList<String>();
         RandomLists.generateRandomNameList(nameList, 10);
@@ -59,9 +60,71 @@ public class JavaMapAndSetExercises {
         }
         for( int a : array) {
             System.out.print( a + " ");
-        }
-        
-        
+        }*/
+    List<Student> sList = new ArrayList<>();
+    RandomLists.generateStudentList(sList, 20);
+    System.out.println("LIST:");
+    printCollection( sList);
+    Map<Integer,Student> studentMap = new TreeMap<>();
+    for( Student s : sList) {
+	studentMap.put( s.id, s);
+    }
+    printCollection(studentMap.values()); 
+    Map<String,List<Student>> courses = new TreeMap<>(); 
+    courses.put( "Computer Science", new ArrayList<Student>());
+    courses.put( "Information Technology", new ArrayList<Student>());
+    courses.put( "Incompetent Government", new ArrayList<Student>());
+    
+    Iterator<String> keyIterator = courses.keySet().iterator();
+    for( Student student : sList) {
+	if ( !keyIterator.hasNext()) {
+		keyIterator = courses.keySet().iterator();
+	}
+	List<Student> list = courses.get( keyIterator.next());
+	list.add(student);
+    }
+    
+    for( String course : courses.keySet()) {
+	System.out.println( course);
+	for( Student student : courses.get( course)) {
+		System.out.println( "\t" + student);
+	}
+    }
+    //each course stores it's students in a treeset using a studentNumberComparator
+    
+    Map<String,TreeSet<Student>> ncourses = new TreeMap<>();
+    ncourses.put( "Computer Science", new TreeSet<Student>(new StudentNumberComparator()));
+    ncourses.put( "Information Technology", new TreeSet<Student>(new StudentNumberComparator()));
+    ncourses.put( "Incompetent Government", new TreeSet<Student>(new StudentNumberComparator()));
+    
+    Iterator<String> nkeyIterator = courses.keySet().iterator();
+    for( Student student : sList) {
+	if ( !nkeyIterator.hasNext()) {
+		nkeyIterator = ncourses.keySet().iterator();
+	}
+	TreeSet<Student> nlist = ncourses.get( nkeyIterator.next());
+	nlist.add(student);
+    }
+    
+    for( String course : ncourses.keySet()) {
+	System.out.println( course);
+	for( Student student : ncourses.get( course)) {
+		System.out.println( "\t" + student);
+	}
+    }
+    
+    // search for a student by number 
+    // we take an id number of a known student for demonstration purposes only
+    int idNumber = sList.get(sList.size() / 2).id;
+    Student student = studentMap.get(idNumber);
+    for(String course : courses.keySet()) {
+	Collection<Student> members = courses.get( course);
+	if ( members.contains( student)) {
+		System.out.println( "Student " + idNumber + " is studying " +
+					course + ".");
+	}
+}
+
 
     }
     
